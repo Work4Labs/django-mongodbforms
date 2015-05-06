@@ -198,12 +198,13 @@ class DocumentMetaWrapper(MutableMapping):
         self.pk = PkWrapper(pk_field)
 
         def _get_pk_val(self):
-            return self._pk_val
+            # needs to be computed on the fly
+            pk_name = self._meta['id_field']  # default to id
+            return getattr(self, pk_name)
         
         if pk_field is not None:
             self.pk.name = self.pk_name
             self.pk.attname = self.pk_name
-            self.document._pk_val = pk_field
             patch_document(_get_pk_val, self.document)
         else:
             self.pk.fake = True
