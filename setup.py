@@ -2,7 +2,7 @@
 
 from subprocess import check_call, CalledProcessError
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 def convert_readme():
@@ -17,11 +17,11 @@ def convert_readme():
 
 setup(
     name='django-mongoengine-forms',
-    version='0.4.3.1',
+    version='0.4.3',
     description="An implementation of django forms using mongoengine.",
     author='Thom Wiggers',
     author_email='thom@thomwiggers.nl',
-    packages=find_packages(),
+    packages=['mongodbforms', 'tests'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
@@ -34,13 +34,11 @@ setup(
     license='New BSD License',
     long_description=convert_readme(),
     include_package_data=True,
-    package_data={
-        "mongodbforms": ['templates/mongodbforms/*', 'static/mongodbforms/*']
-    },
     provides=['mongodbforms'],
     obsoletes=['mongodbforms'],
     url='https://github.com/thomwiggers/django-mongoengine-forms/',
     zip_safe=False,
-    install_requires=['setuptools', 'django>=1.8', 'mongoengine>=0.8.8'],
-    test_suite="tests",
+    install_requires=['setuptools', 'django>=1.8', 'mongoengine>=0.10.0'],
+    tests_require=['mongomock'],
+    test_suite="tests.suite",
 )
