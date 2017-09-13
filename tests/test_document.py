@@ -8,6 +8,7 @@ class MyDocument(Document):
     mystring = fields.StringField()
     myverbosestring = fields.StringField(verbose_name="Foobar")
     myrequiredstring = fields.StringField(required=True)
+    list_of_strings = fields.ListField(fields.StringField())
 
 
 class MyForm(DocumentForm):
@@ -23,7 +24,8 @@ class SimpleDocumentTest(unittest.TestCase):
 
     def test_form(self):
         form = MyForm()
-        self.assertEquals(len(form.fields), 3)
+        self.assertEquals(len(form.fields), 4)
         self.assertFalse(form.fields['mystring'].required)
         self.assertEquals(form.fields['myverbosestring'].label, "Foobar")
         self.assertTrue(form.fields['myrequiredstring'].required)
+        self.assertEqual(form.fields['list_of_strings'].label, "List of strings")
