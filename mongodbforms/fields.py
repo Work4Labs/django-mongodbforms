@@ -76,17 +76,18 @@ class ReferenceField(forms.ChoiceField):
     Reference field for mongo forms. Inspired by
     `django.forms.models.ModelChoiceField`.
     """
-    def __init__(self, queryset, empty_label="---------", *args, **kwargs):
+    def __init__(self, document, empty_label="---------", *args, **kwargs):
         forms.Field.__init__(self, *args, **kwargs)
         self.empty_label = empty_label
-        self.queryset = queryset
+        self._document = document
 
     def _get_queryset(self):
-        return self._queryset.clone()
+        return self._document.objects.clone()
 
     def _set_queryset(self, queryset):
-        self._queryset = queryset
+        # COMPAT: queryset always based on _document, but this setter is used for deepcopy()
         self.widget.choices = self.choices
+
     queryset = property(_get_queryset, _set_queryset)
 
     def prepare_value(self, value):
@@ -160,9 +161,9 @@ class DocumentMultipleChoiceField(ReferenceField):
         'invalid_pk_value': _('"%s" is not a valid value for a primary key.')
     }
 
-    def __init__(self, queryset, *args, **kwargs):
+    def __init__(self, document, *args, **kwargs):
         super(DocumentMultipleChoiceField, self).__init__(
-            queryset, empty_label=None, *args, **kwargs
+            document, empty_label=None, *args, **kwargs
         )
 
     def clean(self, value):
