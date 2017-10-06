@@ -80,15 +80,11 @@ class ReferenceField(forms.ChoiceField):
         forms.Field.__init__(self, *args, **kwargs)
         self.empty_label = empty_label
         self._document = document
-
-    def _get_queryset(self):
-        return self._document.objects.clone()
-
-    def _set_queryset(self, queryset):
-        # COMPAT: queryset always based on _document, but this setter is used for deepcopy()
         self.widget.choices = self.choices
 
-    queryset = property(_get_queryset, _set_queryset)
+    @property
+    def queryset(self):
+        return self._document.objects.clone()
 
     def prepare_value(self, value):
         if hasattr(value, '_meta'):
@@ -129,7 +125,6 @@ class ReferenceField(forms.ChoiceField):
 
     def __deepcopy__(self, memo):
         result = super(forms.ChoiceField, self).__deepcopy__(memo)
-        result.queryset = self.queryset  # self.queryset calls clone()
         result.empty_label = copy.deepcopy(self.empty_label)
         return result
 
