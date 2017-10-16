@@ -25,7 +25,10 @@ from .widgets import ListWidget, MapWidget, HiddenMapWidget, ListOfFilesWidget
 class MongoChoiceIterator(object):
     def __init__(self, field):
         self.field = field
-        self.queryset = field.queryset
+
+    @property
+    def queryset(self):
+        return self.field.queryset
 
     def __iter__(self):
         if self.field.empty_label is not None:
