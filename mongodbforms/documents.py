@@ -570,7 +570,7 @@ class DocumentForm(with_metaclass(DocumentFormMetaclass, BaseDocumentForm)):
 
 
 def documentform_factory(document, form=DocumentForm, fields=None,
-                         exclude=None, formfield_callback=None):
+                         exclude=None, formfield_callback=None, change=False):
     # Build up a list of attributes that the Meta object will have.
     attrs = {'document': document, 'model': document}
     if fields is not None:
