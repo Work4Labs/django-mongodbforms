@@ -109,7 +109,7 @@ class DocumentMetaWrapper(MutableMapping):
     _app_config = None
     _verbose_name = None
     _verbose_name_plural = None
-    has_auto_field = False
+    auto_field = None
     object_name = None
     proxy = []
     proxied_children = []
